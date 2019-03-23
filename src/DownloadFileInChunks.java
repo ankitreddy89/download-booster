@@ -20,7 +20,9 @@ public class DownloadFileInChunks {
             Helpers helpers = new Helpers();
 
             //Parsing the json config file
-            Object obj = parser.parse(new FileReader("config.json"));
+            Object obj = parser.parse(
+                    new FileReader(
+                            "../../../config.json"));
             JSONObject jsonObject =  (JSONObject) obj;
             int numberOfChunks = helpers.convertToBytes((String) jsonObject.get("numberOfChunks"));
             int chunkSize = helpers.convertToBytes((String) jsonObject.get("chunkSize"));
@@ -54,12 +56,9 @@ public class DownloadFileInChunks {
                     BufferedInputStream is = new BufferedInputStream(urlConnection.getInputStream());
                     is.readNBytes(bytes, 0, end-start);
 
-                    String destFile;
+                    String destFile = "chunk_" + (a + 1) + ".jar";;
                     if (args.length == 2){
-                        destFile = args[1];
-                    }
-                    else{
-                        destFile = "chunk_" + (a + 1) + ".jar";
+                        destFile = args[1] + "\\" + destFile;
                     }
                     //Writing to the file
                     FileOutputStream stream = new FileOutputStream(destFile);
