@@ -1,6 +1,8 @@
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Scanner;
+
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -28,6 +30,18 @@ public class DownloadFileInChunks {
             int chunkSize = helpers.convertToBytes((String) jsonObject.get("chunkSize"));
             int totalFileSize = helpers.convertToBytes((String) jsonObject.get("totalFileSize"));
 
+            //Source url provided by the user
+            String sourceUrl;
+            try {
+                sourceUrl = args[0];
+            }
+            catch(ArrayIndexOutOfBoundsException e){
+                System.out.println("Source URL not provided!");
+                System.out.print("Enter the source URL: ");
+                Scanner scanner = new Scanner(System.in);
+                sourceUrl = scanner.next();
+            }
+
             byte[] bytes = new byte[chunkSize];
             int start = 0;
             for (int a = 0; a < numberOfChunks; a++) {
@@ -39,7 +53,6 @@ public class DownloadFileInChunks {
                         end = chunkSize * (a + 1);
                     }
                     //Creating a connection to the source
-                    String sourceUrl = args[0];
                     URL url = new URL(sourceUrl);
                     HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                     urlConnection.setRequestMethod("GET");
