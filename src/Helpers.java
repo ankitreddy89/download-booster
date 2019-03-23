@@ -1,9 +1,15 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Helpers {
+class Helpers {
 
-    public int convertToBytes(String value){
+    /**
+     * Converts the given value to bytes.
+     * @param value String value, if unit not specified then
+     *              will be treated as bytes.
+     * @return int This returns the bytes after conversion.
+     */
+    int convertToBytes(String value){
         List<String> numberAndUnitValue = extractNumberAndUnit(value);
         String number = numberAndUnitValue.get(0);
         String unit = numberAndUnitValue.get(1);
@@ -20,6 +26,13 @@ public class Helpers {
 
     }
 
+    /**
+     * Splits the given String into Unit and number.
+     * @param str The only parameter, string value that
+     *            needs to be split.
+     * @return List of String values, index 0 will be number
+     * and index 1 will be the unit.
+     */
     private static List<String> extractNumberAndUnit(final String str) {
 
         if(str == null || str.isEmpty()) return null;
