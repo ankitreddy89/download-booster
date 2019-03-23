@@ -1,12 +1,8 @@
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Properties;
 import java.util.Scanner;
-
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
 /**
  * The DownloadFileInChunks program implements an application that
  * downloads files from a source in defined chunks.
@@ -18,17 +14,15 @@ public class DownloadFileInChunks {
 
     public static void main(String[] args){
         try {
-            JSONParser parser = new JSONParser();
             Helpers helpers = new Helpers();
+            Properties properties = new Properties();
+            InputStream input = DownloadFileInChunks.class.getClassLoader().getResourceAsStream(
+                    "config.properties");
+            properties.load(input);
 
-            //Parsing the json config file
-            Object obj = parser.parse(
-                    new FileReader(
-                            "../../../config.json"));
-            JSONObject jsonObject =  (JSONObject) obj;
-            int numberOfChunks = helpers.convertToBytes((String) jsonObject.get("numberOfChunks"));
-            int chunkSize = helpers.convertToBytes((String) jsonObject.get("chunkSize"));
-            int totalFileSize = helpers.convertToBytes((String) jsonObject.get("totalFileSize"));
+            int numberOfChunks = Integer.parseInt(properties.getProperty("numberOfChunks"));
+            int chunkSize = helpers.convertToBytes(properties.getProperty("chunkSize"));
+            int totalFileSize = helpers.convertToBytes(properties.getProperty("totalFileSize"));
 
             //Source url provided by the user
             String sourceUrl;
@@ -85,7 +79,7 @@ public class DownloadFileInChunks {
                 }
             }
 
-        } catch (IOException | ParseException exception) {
+        } catch (IOException exception) {
             exception.printStackTrace();
         }
     }
